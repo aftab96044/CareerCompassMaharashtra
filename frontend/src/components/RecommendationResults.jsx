@@ -134,6 +134,11 @@ function RecommendationResults({
                           NAAC {college["NAAC grade"]}
                         </span>
                       )}
+                      {Array.isArray(college["Exams Accepted"]) && college["Exams Accepted"].length > 0 && (
+                        <span className="badge exam-badge">
+                          📝 {college["Exams Accepted"].join(", ")}
+                        </span>
+                      )}
                     </div>
 
                     <div className="rec-facts-grid">

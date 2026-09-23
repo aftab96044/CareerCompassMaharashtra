@@ -326,7 +326,33 @@ function generateLocalFactualResponse(
     );
   }
 
-  // 2. CUTOFF & RANK INQUIRIES (Explicitly absent from DB)
+  // 2. ENTRANCE EXAM PATHWAY QUERIES (IIT Bombay & VNIT vs MHT-CET)
+  if (
+    (q.includes("iit") || q.includes("iitb") || q.includes("iit bombay")) &&
+    (q.includes("cet") || q.includes("mht") || q.includes("mht-cet"))
+  ) {
+    return (
+      `**No, you cannot get admission into IIT Bombay through MHT-CET.** 🚫\n\n` +
+      `• **Admission Pathway:** IIT Bombay admits students exclusively through **JEE Advanced** via JoSAA (Joint Seat Allocation Authority) counselling.\n` +
+      `• **Percentile Requirement:** Candidates typically need a **99+ percentile in JEE** to qualify for JEE Advanced and secure top All-India ranks.\n` +
+      `• **What MHT-CET is for:** MHT-CET is conducted exclusively for Maharashtra State government, autonomous, and private engineering institutions (such as **COEP Tech**, **VJTI Mumbai**, **ICT Mumbai**, **PICT Pune**, and **SPIT Mumbai**).\n\n` +
+      `If you have appeared for MHT-CET, top Maharashtra state institutions like COEP and VJTI are the premier choices for your score.`
+    );
+  }
+
+  if (
+    (q.includes("vnit") || q.includes("vnit nagpur")) &&
+    (q.includes("cet") || q.includes("mht") || q.includes("mht-cet"))
+  ) {
+    return (
+      `**No, VNIT Nagpur does not accept MHT-CET.** 🚫\n\n` +
+      `• **Admission Pathway:** VNIT Nagpur is a National Institute of Technology (NIT) and admits candidates strictly through **JEE Main** via JoSAA / CSAB counselling.\n` +
+      `• **Score Requirement:** It generally requires a **94+ percentile in JEE Main** for competitive branches.\n` +
+      `• **Alternative:** For MHT-CET counselling, the equivalent premier government/autonomous colleges in Maharashtra are **COEP Tech**, **VJTI Mumbai**, and **Walchand Sangli**.`
+    );
+  }
+
+  // 3. CUTOFF & RANK INQUIRIES (Explicitly absent from DB)
   if (
     q.includes("cutoff") ||
     q.includes("cut-off") ||

@@ -2,12 +2,13 @@
 // Total possible score targets 100 points
 module.exports = {
   WEIGHTS: {
-    BRANCH_MATCH: 25, // Student's preferred branch offered
-    BUDGET_MATCH: 20, // Fits annual fees preference
+    BRANCH_MATCH: 20, // Student's preferred branch offered
+    EXAM_AND_CUTOFF_FIT: 25, // Valid entrance exam & percentile fit
+    BUDGET_MATCH: 15, // Fits annual fees preference
     LOCATION_MATCH: 15, // Matches preferred district/city
-    HOSTEL_MATCH: 15, // Hostel requirement satisfied
-    AUTONOMOUS_MATCH: 10, // Autonomous status matches preference
-    PLACEMENT_PERFORMANCE: 10, // Placement % and average package rating
+    HOSTEL_MATCH: 10, // Hostel requirement satisfied
+    AUTONOMOUS_MATCH: 5, // Autonomous status matches preference
+    PLACEMENT_PERFORMANCE: 5, // Placement % and average package rating
     CAMPUS_LIFE_CLUBS: 5, // Coding club, sports, cultural activities
   },
   THRESHOLDS: {
