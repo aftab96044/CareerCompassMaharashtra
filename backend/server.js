@@ -7,6 +7,7 @@ const College = require("./models/College");
 const {
   sanitizeCollege,
   fetchAllColleges,
+  getReputationTier,
 } = require("./services/recommendationService");
 const recommendationRoutes = require("./routes/recommendationRoutes");
 const aiRoutes = require("./routes/aiRoutes");
@@ -48,11 +49,22 @@ async function connectDatabase() {
 
 connectDatabase();
 
-// Existing college list route (strictly omitting Highest Package)
+// College list route (strictly omitting Highest Package, sorted with best colleges first)
 app.get("/api/colleges", async (req, res) => {
   try {
     const colleges = await fetchAllColleges();
     const sanitized = colleges.map((c) => sanitizeCollege(c));
+    sanitized.sort((a, b) => {
+      const tierA = getReputationTier(a.College);
+      const tierB = getReputationTier(b.College);
+      if (tierA !== tierB) return tierA - tierB;
+      const bPkg = parseFloat(b["Avg package"]) || 0;
+      const aPkg = parseFloat(a["Avg package"]) || 0;
+      if (bPkg !== aPkg) return bPkg - aPkg;
+      const bPct = parseFloat(b["Placement %"]) || 0;
+      const aPct = parseFloat(a["Placement %"]) || 0;
+      return bPct - aPct;
+    });
     res.json(sanitized);
   } catch (error) {
     console.error("Error in /api/colleges:", error);

@@ -139,6 +139,83 @@ function getCollegeBenchmarkCutoff(collegeName, examType) {
 }
 
 /**
+ * Institutional Reputation & Prestige Tier (1 = Premier to 5 = Regional)
+ * Ensures best colleges in Maharashtra consistently appear first in rankings.
+ */
+const COLLEGE_REPUTATION_TIER = {
+  // Tier 1: Premier National & State Institutes
+  "IIT Bombay": 1,
+  "COEP Technological University": 1,
+  "VJTI": 1,
+  "SPIT Mumbai": 1,
+  "PICT Pune": 1,
+  "ICT Mumbai": 1,
+  "VNIT Nagpur": 1,
+
+  // Tier 2: Top Autonomous & Highly Reputed Colleges
+  "Walchand College of Engineering": 2,
+  "Vishwakarma Institute of Technology": 2,
+  "DJ Sanghvi College of Engineering": 2,
+  "Pimpri Chinchwad College of Engineering": 2,
+  "Army Institute of Technology": 2,
+  "K. J. Somaiya College of Engineering": 2,
+  "Vishwakarma Institute of Information Technology": 2,
+  "Thadomal Shahani Engineering College": 2,
+  "International Institute of Information Technology (I²IT)": 2,
+
+  // Tier 3: Established Government & Reputed Colleges
+  "Government College of Engineering Aurangabad": 3,
+  "Government College of Engineering Amravati": 3,
+  "Vivekanand Education Society's Institute of Technology": 3,
+  "Shri Ramdeobaba College of Engineering and Management": 3,
+  "MIT World Peace University": 3,
+  "Fr. Conceicao Rodrigues College of Engineering": 3,
+  "Fr. Conceicao Rodrigues Institute of Technology": 3,
+  "Vidyalankar Institute of Technology": 3,
+  "MIT Academy of Engineering": 3,
+
+  // Tier 4: Prominent Accredited Colleges
+  "D. Y. Patil Institute of Technology": 4,
+  "D. Y. Patil College of Engineering": 4,
+  "SIES Graduate School of Technology": 4,
+  "Ramrao Adik Institute of Technology": 4,
+  "K. J. Somaiya Institute of Technology": 4,
+  "AISSMS College of Engineering": 4,
+  "Progressive Education Society's Modern College of Engineering": 4,
+  "St. Francis Institute of Technology": 4,
+  "K. K. Wagh Institute of Engineering Education and Research": 4,
+  "Yeshwantrao Chavan College of Engineering": 4,
+  "JSPM Rajarshi Shahu College of Engineering": 4,
+  "Bharati Vidyapeeth College of Engineering Pune": 4,
+  "Sinhgad College of Engineering": 4,
+
+  // Tier 5: Other Regional Engineering Colleges
+  "Don Bosco Institute of Technology": 5,
+  "Shah and Anchor Kutchhi Engineering College": 5,
+  "Bharati Vidyapeeth College of Engineering Navi Mumbai": 5,
+  "Rajarambapu Institute of Technology": 5,
+  "Walchand Institute of Technology": 5,
+  "Kolhapur Institute of Technology": 5,
+  "Sanjivani College of Engineering": 5,
+  "Indira College of Engineering and Management": 5,
+  "Nutan Maharashtra Institute of Engineering and Technology": 5,
+  "G. H. Raisoni College of Engineering": 5,
+};
+
+function getReputationTier(collegeName) {
+  if (!collegeName) return 5;
+  for (const [name, tier] of Object.entries(COLLEGE_REPUTATION_TIER)) {
+    if (
+      collegeName.toLowerCase().includes(name.toLowerCase()) ||
+      name.toLowerCase().includes(collegeName.toLowerCase())
+    ) {
+      return tier;
+    }
+  }
+  return 5;
+}
+
+/**
  * Evaluates Entrance Exam eligibility and Percentile fit
  */
 function evaluateExamAndCutoff(
@@ -570,14 +647,32 @@ async function generateRecommendations(preferences = {}) {
     };
   });
 
-  // Sort descending by match score, then by avg package
+  // Sort colleges:
+  // 1. If match score difference is significant (> 4 points), respect user preference match score
+  // 2. For colleges with close match scores (within 4 points), best colleges appear first (Tier 1 > Tier 2 > Tier 3)
+  // 3. Then by average placement package (descending)
+  // 4. Then by placement rate (descending)
   scoredColleges.sort((a, b) => {
-    if (b.matchScore !== a.matchScore) {
-      return b.matchScore - a.matchScore;
+    const scoreDiff = b.matchScore - a.matchScore;
+    if (Math.abs(scoreDiff) > 4) {
+      return scoreDiff;
     }
+
+    const tierA = getReputationTier(a.College);
+    const tierB = getReputationTier(b.College);
+    if (tierA !== tierB) {
+      return tierA - tierB; // Lower tier number = higher reputation (Tier 1 before Tier 2)
+    }
+
     const bPkg = parseFloat(b["Avg package"]) || 0;
     const aPkg = parseFloat(a["Avg package"]) || 0;
-    return bPkg - aPkg;
+    if (bPkg !== aPkg) {
+      return bPkg - aPkg;
+    }
+
+    const bPct = parseFloat(b["Placement %"]) || 0;
+    const aPct = parseFloat(a["Placement %"]) || 0;
+    return bPct - aPct;
   });
 
   const recommended = scoredColleges.filter(
@@ -615,4 +710,6 @@ module.exports = {
   sanitizeCollege,
   evaluateExamAndCutoff,
   COLLEGE_CUTOFF_BENCHMARKS,
+  COLLEGE_REPUTATION_TIER,
+  getReputationTier,
 };
