@@ -165,18 +165,27 @@ function RecommendationForm({ onSubmit, loading }) {
 
               {formData.entranceExam === "MHT-CET" && (
                 <div className="exam-guidance-note">
-                  ℹ️ <strong>MHT-CET Pathway:</strong> Matches Maharashtra State CAP engineering colleges (COEP, VJTI, ICT, PICT, etc.).
-                  <em>Note: IIT Bombay (requires JEE Advanced) and VNIT Nagpur (requires JEE Main) do not accept MHT-CET and are strictly excluded.</em>
+                  ℹ️ <strong>MHT-CET Pathway:</strong> Matches Maharashtra State
+                  CAP engineering colleges (COEP, VJTI, ICT, PICT, etc.).
+                  <em>
+                    Note: IIT Bombay (requires JEE Advanced) and VNIT Nagpur
+                    (requires JEE Main) do not accept MHT-CET and are strictly
+                    excluded.
+                  </em>
                 </div>
               )}
               {formData.entranceExam === "JEE Main" && (
                 <div className="exam-guidance-note">
-                  ℹ️ <strong>JEE Main Pathway:</strong> Matches VNIT Nagpur (requires 94+ percentile) and All-India quota seats in Maharashtra colleges (requires 99+ percentile if targeting IIT Bombay qualification).
+                  ℹ️ <strong>JEE Main Pathway:</strong> Matches VNIT Nagpur
+                  (requires 94+ percentile) and All-India quota seats in
+                  Maharashtra colleges (requires 99+ percentile if targeting IIT
+                  Bombay qualification).
                 </div>
               )}
               {formData.entranceExam === "JEE Advanced" && (
                 <div className="exam-guidance-note">
-                  ℹ️ <strong>JEE Advanced Pathway:</strong> Premier pathway for IIT Bombay (requires 99+ percentile in JEE).
+                  ℹ️ <strong>JEE Advanced Pathway:</strong> Premier pathway for
+                  IIT Bombay (requires 99+ percentile in JEE).
                 </div>
               )}
             </div>
@@ -199,7 +208,9 @@ function RecommendationForm({ onSubmit, loading }) {
                 className="text-input"
               />
               <span className="field-hint">
-                Enter your percentile (0-100). E.g. 99 for IIT Bombay, 94+ for VNIT Nagpur, 85+ for State Colleges. Leave blank if yet to appear.
+                Enter your percentile (0-100). E.g. 99 for IIT Bombay, 94+ for
+                VNIT Nagpur, 85+ for State Colleges. Leave blank if yet to
+                appear.
               </span>
             </div>
           </div>

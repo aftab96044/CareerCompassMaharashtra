@@ -20,7 +20,7 @@ function getFallbackColleges() {
       __dirname,
       "..",
       "data",
-      "defaultColleges.json"
+      "defaultColleges.json",
     );
     if (fs.existsSync(fallbackPath)) {
       return JSON.parse(fs.readFileSync(fallbackPath, "utf8"));
@@ -41,7 +41,7 @@ async function fetchAllColleges() {
     } catch (error) {
       console.warn(
         "MongoDB query failed, using verified fallback data:",
-        error.message
+        error.message,
       );
     }
   }
@@ -56,7 +56,7 @@ const COLLEGE_CUTOFF_BENCHMARKS = {
   "IIT Bombay": { cet: null, jee: 99.0 },
   "VNIT Nagpur": { cet: null, jee: 94.0 },
   "COEP Technological University": { cet: 99.0, jee: 98.5 },
-  "VJTI": { cet: 98.8, jee: 98.5 },
+  VJTI: { cet: 98.8, jee: 98.5 },
   "SPIT Mumbai": { cet: 98.5, jee: 98.0 },
   "PICT Pune": { cet: 98.5, jee: 98.0 },
   "ICT Mumbai": { cet: 98.0, jee: 97.5 },
@@ -66,11 +66,20 @@ const COLLEGE_CUTOFF_BENCHMARKS = {
   "Pimpri Chinchwad College of Engineering": { cet: 94.0, jee: 93.0 },
   "Army Institute of Technology": { cet: null, jee: 93.0 },
   "K. J. Somaiya College of Engineering": { cet: 93.0, jee: 92.0 },
-  "International Institute of Information Technology (I²IT)": { cet: 90.0, jee: 89.0 },
+  "International Institute of Information Technology (I²IT)": {
+    cet: 90.0,
+    jee: 89.0,
+  },
   "Vishwakarma Institute of Information Technology": { cet: 90.0, jee: 89.0 },
   "Thadomal Shahani Engineering College": { cet: 91.0, jee: 90.0 },
-  "Vivekanand Education Society's Institute of Technology": { cet: 90.0, jee: 89.0 },
-  "Shri Ramdeobaba College of Engineering and Management": { cet: 89.0, jee: 88.0 },
+  "Vivekanand Education Society's Institute of Technology": {
+    cet: 90.0,
+    jee: 89.0,
+  },
+  "Shri Ramdeobaba College of Engineering and Management": {
+    cet: 89.0,
+    jee: 88.0,
+  },
   "Government College of Engineering Aurangabad": { cet: 89.0, jee: 88.0 },
   "Fr. Conceicao Rodrigues College of Engineering": { cet: 88.0, jee: 87.0 },
   "MIT World Peace University": { cet: 88.0, jee: 87.0 },
@@ -85,21 +94,33 @@ const COLLEGE_CUTOFF_BENCHMARKS = {
   "Ramrao Adik Institute of Technology": { cet: 82.0, jee: 81.0 },
   "Bharati Vidyapeeth College of Engineering Pune": { cet: 82.0, jee: 81.0 },
   "AISSMS College of Engineering": { cet: 80.0, jee: 79.0 },
-  "Progressive Education Society's Modern College of Engineering": { cet: 80.0, jee: 79.0 },
+  "Progressive Education Society's Modern College of Engineering": {
+    cet: 80.0,
+    jee: 79.0,
+  },
   "St. Francis Institute of Technology": { cet: 80.0, jee: 79.0 },
-  "K. K. Wagh Institute of Engineering Education and Research": { cet: 80.0, jee: 79.0 },
+  "K. K. Wagh Institute of Engineering Education and Research": {
+    cet: 80.0,
+    jee: 79.0,
+  },
   "Yeshwantrao Chavan College of Engineering": { cet: 80.0, jee: 79.0 },
   "Don Bosco Institute of Technology": { cet: 78.0, jee: 77.0 },
   "JSPM Rajarshi Shahu College of Engineering": { cet: 78.0, jee: 77.0 },
   "Rajarambapu Institute of Technology": { cet: 78.0, jee: 77.0 },
   "Shah and Anchor Kutchhi Engineering College": { cet: 77.0, jee: 76.0 },
   "Sinhgad College of Engineering": { cet: 76.0, jee: 75.0 },
-  "Bharati Vidyapeeth College of Engineering Navi Mumbai": { cet: 76.0, jee: 75.0 },
+  "Bharati Vidyapeeth College of Engineering Navi Mumbai": {
+    cet: 76.0,
+    jee: 75.0,
+  },
   "Walchand Institute of Technology": { cet: 70.0, jee: 68.0 },
   "Kolhapur Institute of Technology": { cet: 68.0, jee: 66.0 },
   "Sanjivani College of Engineering": { cet: 68.0, jee: 66.0 },
   "Indira College of Engineering and Management": { cet: 65.0, jee: 64.0 },
-  "Nutan Maharashtra Institute of Engineering and Technology": { cet: 65.0, jee: 64.0 },
+  "Nutan Maharashtra Institute of Engineering and Technology": {
+    cet: 65.0,
+    jee: 64.0,
+  },
   "G. H. Raisoni College of Engineering": { cet: 65.0, jee: 64.0 },
 };
 
@@ -109,7 +130,9 @@ function getCollegeBenchmarkCutoff(collegeName, examType) {
       collegeName.toLowerCase().includes(name.toLowerCase()) ||
       name.toLowerCase().includes(collegeName.toLowerCase())
     ) {
-      return (examType || "").toLowerCase().includes("cet") ? cuts.cet : cuts.jee;
+      return (examType || "").toLowerCase().includes("cet")
+        ? cuts.cet
+        : cuts.jee;
     }
   }
   return (examType || "").toLowerCase().includes("cet") ? 75.0 : 73.0;
@@ -118,7 +141,11 @@ function getCollegeBenchmarkCutoff(collegeName, examType) {
 /**
  * Evaluates Entrance Exam eligibility and Percentile fit
  */
-function evaluateExamAndCutoff(college, entranceExam = "MHT-CET", userScore = null) {
+function evaluateExamAndCutoff(
+  college,
+  entranceExam = "MHT-CET",
+  userScore = null,
+) {
   const collegeName = college.College || "";
   const acceptedExams = Array.isArray(college["Exams Accepted"])
     ? college["Exams Accepted"]
@@ -126,7 +153,10 @@ function evaluateExamAndCutoff(college, entranceExam = "MHT-CET", userScore = nu
 
   const normExam = (entranceExam || "MHT-CET").trim();
   const parsedScore =
-    userScore !== "" && userScore !== null && userScore !== undefined && !isNaN(Number(userScore))
+    userScore !== "" &&
+    userScore !== null &&
+    userScore !== undefined &&
+    !isNaN(Number(userScore))
       ? Number(userScore)
       : null;
 
@@ -173,7 +203,8 @@ function evaluateExamAndCutoff(college, entranceExam = "MHT-CET", userScore = nu
         return {
           isEligible: true,
           score: WEIGHTS.EXAM_AND_CUTOFF_FIT * 0.9,
-          reason: "Premier national institute via JEE Advanced (Requires ~99+ percentile)",
+          reason:
+            "Premier national institute via JEE Advanced (Requires ~99+ percentile)",
         };
       }
       return { isEligible: false, score: 0, reason: null };
@@ -206,7 +237,8 @@ function evaluateExamAndCutoff(college, entranceExam = "MHT-CET", userScore = nu
       return {
         isEligible: true,
         score: WEIGHTS.EXAM_AND_CUTOFF_FIT * 0.85,
-        reason: "National Institute of Technology (VNIT) via JEE Main (94+ percentile criteria)",
+        reason:
+          "National Institute of Technology (VNIT) via JEE Main (94+ percentile criteria)",
       };
     }
   }
@@ -214,7 +246,8 @@ function evaluateExamAndCutoff(college, entranceExam = "MHT-CET", userScore = nu
   // 4. GENERAL EXAM ACCEPTANCE CHECK
   const acceptsExam =
     normExam === "JEE Advanced"
-      ? acceptedExams.includes("JEE Main") || acceptedExams.includes("JEE Advanced")
+      ? acceptedExams.includes("JEE Main") ||
+        acceptedExams.includes("JEE Advanced")
       : acceptedExams.includes(normExam) || acceptedExams.length === 0;
 
   if (!acceptsExam) {
@@ -410,7 +443,7 @@ async function generateRecommendations(preferences = {}) {
     totalScore += budgetCheck.score;
     if (budgetCheck.matches && college.Fees != null) {
       reasons.push(
-        `Fits your budget (₹${Number(college.Fees).toLocaleString()}/year)`
+        `Fits your budget (₹${Number(college.Fees).toLocaleString()}/year)`,
       );
     }
 
@@ -428,7 +461,7 @@ async function generateRecommendations(preferences = {}) {
     } else if (distLower.includes(locLower) || cityLower.includes(locLower)) {
       totalScore += WEIGHTS.LOCATION_MATCH;
       reasons.push(
-        `Located in your preferred area (${college.District || college.City})`
+        `Located in your preferred area (${college.District || college.City})`,
       );
     } else {
       totalScore += 2;
@@ -487,7 +520,7 @@ async function generateRecommendations(preferences = {}) {
       reasons.push(
         `Strong placement record (${avgPackageNum ? `Avg ~${avgPackageNum} LPA` : ""}${
           placementPctNum ? `, ${placementPctNum}% placed` : ""
-        })`
+        })`,
       );
     }
 
@@ -548,12 +581,12 @@ async function generateRecommendations(preferences = {}) {
   });
 
   const recommended = scoredColleges.filter(
-    (c) => c.matchScore >= THRESHOLDS.RECOMMENDED_MIN_SCORE
+    (c) => c.matchScore >= THRESHOLDS.RECOMMENDED_MIN_SCORE,
   );
   const considerations = scoredColleges.filter(
     (c) =>
       c.matchScore >= THRESHOLDS.CONSIDERATION_MIN_SCORE &&
-      c.matchScore < THRESHOLDS.RECOMMENDED_MIN_SCORE
+      c.matchScore < THRESHOLDS.RECOMMENDED_MIN_SCORE,
   );
 
   return {
